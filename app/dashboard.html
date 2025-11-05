@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Sapiens — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f4f4f4;
+        --text: #000000;
+        --accent: #ff6a00;
+        --shadow: 4px 4px 0px var(--text);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'IBM Plex Mono', monospace;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1120px, 92%);
+        margin: 0 auto;
+      }
+
+      .global-header {
+        border-bottom: 2px solid var(--text);
+        background: var(--bg);
+      }
+
+      .header-inner {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 2rem;
+        padding: 1.5rem 0;
+      }
+
+      .brand {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+
+      .nav-links {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav-links a {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        padding: 0.5rem 1.25rem;
+        border: 2px solid var(--text);
+        background: var(--bg);
+        box-shadow: var(--shadow);
+        transition: transform 0.1s ease-in-out;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus {
+        transform: translate(-2px, -2px);
+        outline: none;
+      }
+
+      .auth-cta .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        padding: 0.65rem 1.5rem;
+        border: 2px solid var(--text);
+        background: var(--accent);
+        color: var(--text);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+      }
+
+      .auth-cta .button:hover,
+      .auth-cta .button:focus {
+        transform: translate(-2px, -2px);
+        outline: none;
+      }
+
+      .mobile-nav {
+        display: none;
+        grid-column: 1 / -1;
+      }
+
+      .mobile-nav summary {
+        list-style: none;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        border: 2px solid var(--text);
+        background: var(--accent);
+        color: var(--text);
+        padding: 0.65rem 1rem;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+      }
+
+      .mobile-nav summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .mobile-nav[open] summary {
+        margin-bottom: 1rem;
+      }
+
+      .mobile-nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .mobile-nav-links a {
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--text);
+        background: var(--bg);
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        box-shadow: var(--shadow);
+      }
+
+      .mobile-nav-links .button {
+        width: 100%;
+        text-align: left;
+      }
+
+      main {
+        padding: 3rem 0 4rem;
+      }
+
+      .loading-state {
+        border: 2px solid var(--text);
+        background: var(--bg);
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .dashboard-shell {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .dashboard-title {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: clamp(1.3rem, 1vw + 1.2rem, 2.2rem);
+        margin: 0;
+      }
+
+      .button {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid var(--text);
+        background: var(--accent);
+        color: var(--text);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+      }
+
+      .button:hover,
+      .button:focus {
+        transform: translate(-2px, -2px);
+        outline: none;
+      }
+
+      .button.secondary {
+        background: var(--bg);
+      }
+
+      .mobile-logout {
+        display: none;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2rem;
+      }
+
+      .card {
+        border: 2px solid var(--text);
+        background: var(--bg);
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .card h2,
+      .card h3 {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        margin: 0;
+      }
+
+      .profile-grid {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .profile-label {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.85rem;
+      }
+
+      .stat-value {
+        font-size: 1rem;
+      }
+
+      .level-display {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .level-topline {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        align-items: end;
+      }
+
+      .level-number {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 3rem;
+      }
+
+      .level-title {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+      }
+
+      .level-subtitle {
+        font-size: 0.95rem;
+      }
+
+      .xp-bar {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .xp-track {
+        border: 2px solid var(--text);
+        height: 24px;
+        background: #ffffff;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .xp-fill {
+        background: var(--accent);
+        height: 100%;
+        width: 0;
+        transition: width 0.4s ease;
+      }
+
+      .xp-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.85rem;
+      }
+
+      .xp-note {
+        font-size: 0.9rem;
+      }
+
+      .ai-metrics {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 2px solid var(--text);
+        background: #ffffff;
+        box-shadow: var(--shadow);
+        padding: 1rem;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .footer {
+        background: var(--text);
+        color: #ffffff;
+        padding: 3rem 0 2rem;
+      }
+
+      .footer-inner {
+        width: min(1120px, 92%);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 2rem;
+      }
+
+      .footer h4 {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        margin: 0 0 1rem;
+        font-size: 0.95rem;
+      }
+
+      .footer ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .footer a {
+        color: #ffffff;
+        font-size: 0.95rem;
+      }
+
+      .footer-bottom {
+        border-top: 2px solid #ffffff;
+        margin-top: 3rem;
+        padding-top: 1rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        text-align: center;
+      }
+
+      @media (max-width: 1024px) {
+        .header-inner {
+          grid-template-columns: 1fr;
+          justify-items: start;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .mobile-nav {
+          display: block;
+        }
+
+        .dashboard-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .mobile-logout {
+          display: block;
+        }
+
+        .footer-inner {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .footer-inner {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="global-header">
+      <div class="container header-inner">
+        <a href="/index.html" class="brand">Project Sapiens</a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="/paths.html">Learning Paths</a>
+          <a href="/labs.html">Labs</a>
+          <a href="/community.html">Community</a>
+        </nav>
+        <div class="auth-cta">
+          <button class="button" id="logoutBtn" type="button">Log Out</button>
+        </div>
+        <details class="mobile-nav">
+          <summary>Menu</summary>
+          <div class="mobile-nav-links">
+            <a href="/paths.html">Learning Paths</a>
+            <a href="/labs.html">Labs</a>
+            <a href="/community.html">Community</a>
+            <button class="button" id="logoutBtnMobile" type="button">Log Out</button>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div id="loading" class="loading-state">Loading Dashboard…</div>
+        <section id="dashboard" class="dashboard-shell hidden" aria-live="polite">
+          <header class="dashboard-header">
+            <h1 class="dashboard-title">Welcome Back, <span id="usernameDisplay">Operator</span></h1>
+            <button class="button" id="logoutBtnDesktop" type="button">Log Out</button>
+          </header>
+          <button class="button mobile-logout" id="logoutBtnMobileInline" type="button">Log Out</button>
+          <div class="dashboard-grid">
+            <article class="card">
+              <h2>My Profile</h2>
+              <div class="profile-grid">
+                <div>
+                  <p class="profile-label">Username</p>
+                  <p class="stat-value" id="usernameValue">Loading…</p>
+                </div>
+                <div>
+                  <p class="profile-label">Email</p>
+                  <p class="stat-value" id="emailValue">Loading…</p>
+                </div>
+                <div>
+                  <p class="profile-label">Member Since</p>
+                  <p class="stat-value" id="memberSince">Loading…</p>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <h2>Skill Progress</h2>
+              <div class="level-display">
+                <div class="level-topline">
+                  <div class="level-number" id="levelNumber">1</div>
+                  <div>
+                    <div class="level-title" id="levelTitle">AI Collaborator</div>
+                    <div class="level-subtitle" id="levelSubtitle">AI Fundamentals</div>
+                  </div>
+                </div>
+                <div class="xp-bar">
+                  <div class="xp-track">
+                    <div class="xp-fill" id="xpFill"></div>
+                  </div>
+                  <div class="xp-meta">
+                    <span>XP to Level <span id="nextLevel">2</span></span>
+                    <span><span id="currentXP">0</span> / <span id="targetXP">1000</span></span>
+                  </div>
+                  <p class="xp-note" id="xpNote">Tracking next milestone…</p>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <h2>AI Fluency</h2>
+              <div class="ai-metrics">
+                <div class="metric">
+                  <span>Daily Prompts</span>
+                  <span id="dailyPrompts">0</span>
+                </div>
+                <div class="metric">
+                  <span>Automation Routines</span>
+                  <span id="automationRoutines">0</span>
+                </div>
+                <div class="metric">
+                  <span>Confidence Index</span>
+                  <span id="confidenceIndex">0%</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>
+          <h4>Project Sapiens</h4>
+          <ul>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/paths.html">Learning Paths</a></li>
+            <li><a href="/app/dashboard.html">Dashboard</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Programs</h4>
+          <ul>
+            <li><a href="/paths.html#builders">Builders</a></li>
+            <li><a href="/paths.html#leaders">Leaders</a></li>
+            <li><a href="/paths.html#analysts">Analysts</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Labs</h4>
+          <ul>
+            <li><a href="/labs.html">Automation Lab</a></li>
+            <li><a href="/labs.html">Prompt Lab</a></li>
+            <li><a href="/labs.html">Data Lab</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="mailto:team@projectsapiens.ai">Email</a></li>
+            <li><a href="/community.html">Community</a></li>
+            <li><a href="/login.html">Member Portal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="container footer-bottom">© Project Sapiens. All Rights Reserved.</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = 'https://cmjocwutzuujokaoscox.supabase.co';
+      const SUPABASE_KEY =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtam9jd3V0enV1am9rYW9zY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODkwNzAsImV4cCI6MjA3Nzg2NTA3MH0.ekLWlkUJ5jvFwDIxgSx7PhXV7JjcsyzuALxDTqgIEns';
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      async function signUp(event) {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.querySelector('input[type="email"]').value.trim();
+        const password = form.querySelector('input[type="password"]').value;
+        const messageEl = form.querySelector('[data-form-message]');
+        if (messageEl) {
+          messageEl.textContent = '';
+          messageEl.classList.remove('error');
+        }
+
+        const { error } = await supabaseClient.auth.signUp({ email, password });
+
+        if (error) {
+          if (messageEl) {
+            messageEl.textContent = error.message;
+            messageEl.classList.add('error');
+          }
+          return;
+        }
+
+        if (messageEl) {
+          messageEl.textContent = 'Check your inbox to confirm your account.';
+        }
+        form.reset();
+      }
+
+      async function signInWithPassword(event) {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.querySelector('input[type="email"]').value.trim();
+        const password = form.querySelector('input[type="password"]').value;
+        const messageEl = form.querySelector('[data-form-message]');
+        if (messageEl) {
+          messageEl.textContent = '';
+          messageEl.classList.remove('error');
+        }
+
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          if (messageEl) {
+            messageEl.textContent = error.message;
+            messageEl.classList.add('error');
+          }
+          return;
+        }
+
+        window.location.href = '/app/dashboard.html';
+      }
+
+      async function getSession() {
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) {
+          throw error;
+        }
+        return data.session;
+      }
+
+      async function signOut(event) {
+        if (event) {
+          event.preventDefault();
+        }
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) {
+          console.error('Error signing out:', error);
+          return;
+        }
+        window.location.href = '/login.html';
+      }
+
+      const LEVEL_THRESHOLDS = {
+        1: { min: 0, max: 1000, title: 'AI Collaborator', subtitle: 'AI Fundamentals' },
+        2: { min: 1000, max: 4000, title: 'AI Practitioner', subtitle: 'Workflow Designer' },
+        3: { min: 4000, max: 10000, title: 'AI Integrator', subtitle: 'System Builder' },
+        4: { min: 10000, max: Infinity, title: 'AI Leader', subtitle: 'Solution Architect' }
+      };
+
+      function calculateLevel(xp) {
+        for (const [level, config] of Object.entries(LEVEL_THRESHOLDS)) {
+          if (xp >= config.min && xp < config.max) {
+            return { level: Number(level), ...config };
+          }
+        }
+        return { level: 4, ...LEVEL_THRESHOLDS[4] };
+      }
+
+      function updateDashboard(profile) {
+        const levelData = calculateLevel(profile.xp_points || 0);
+        const xpInCurrentLevel = (profile.xp_points || 0) - levelData.min;
+        const xpRange = levelData.max === Infinity ? 1 : levelData.max - levelData.min;
+        const xpProgress = levelData.max === Infinity ? 100 : Math.min(100, (xpInCurrentLevel / xpRange) * 100);
+
+        document.getElementById('usernameDisplay').textContent = profile.username.toUpperCase();
+        document.getElementById('usernameValue').textContent = profile.username;
+        document.getElementById('emailValue').textContent = profile.email;
+        document.getElementById('memberSince').textContent = new Date(profile.created_at).toLocaleDateString();
+
+        document.getElementById('levelNumber').textContent = levelData.level;
+        document.getElementById('levelTitle').textContent = levelData.title;
+        document.getElementById('levelSubtitle').textContent = levelData.subtitle;
+        document.getElementById('nextLevel').textContent = levelData.level < 4 ? levelData.level + 1 : '∞';
+        document.getElementById('currentXP').textContent = (profile.xp_points || 0).toLocaleString();
+        document.getElementById('targetXP').textContent = levelData.max === Infinity ? '∞' : levelData.max.toLocaleString();
+        document.getElementById('xpFill').style.width = `${xpProgress}%`;
+
+        if (levelData.max === Infinity) {
+          document.getElementById('xpNote').textContent = 'Maximum level achieved. Maintain operational excellence.';
+        } else {
+          const xpRemaining = Math.max(levelData.max - (profile.xp_points || 0), 0);
+          document.getElementById('xpNote').textContent = `${xpRemaining.toLocaleString()} XP until Level ${levelData.level + 1}`;
+        }
+
+        document.getElementById('dailyPrompts').textContent = (profile.daily_prompts || 0).toLocaleString();
+        document.getElementById('automationRoutines').textContent = (profile.automation_routines || 0).toLocaleString();
+        const confidence = profile.confidence_index ?? 0;
+        document.getElementById('confidenceIndex').textContent = `${Math.round(confidence)}%`;
+      }
+
+      async function loadDashboard() {
+        try {
+          const { data, error } = await supabaseClient.auth.getSession();
+          if (error) throw error;
+
+          const session = data.session;
+          if (!session) {
+            window.location.href = '/login.html';
+            return;
+          }
+
+          const { data: profile, error: profileError } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .maybeSingle();
+
+          if (profileError) throw profileError;
+
+          if (!profile) {
+            await supabaseClient.auth.signOut();
+            window.location.href = '/login.html';
+            return;
+          }
+
+          updateDashboard(profile);
+          document.getElementById('loading').classList.add('hidden');
+          document.getElementById('dashboard').classList.remove('hidden');
+        } catch (error) {
+          console.error('Dashboard error:', error);
+          window.location.href = '/login.html';
+        }
+      }
+
+      const logoutButtons = [
+        document.getElementById('logoutBtn'),
+        document.getElementById('logoutBtnDesktop'),
+        document.getElementById('logoutBtnMobile'),
+        document.getElementById('logoutBtnMobileInline')
+      ].filter(Boolean);
+
+      logoutButtons.forEach((btn) => btn.addEventListener('click', signOut));
+
+      loadDashboard();
+    </script>
+  </body>
+</html>

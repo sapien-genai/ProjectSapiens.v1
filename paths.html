@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Sapiens — Learning Paths</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f4f4f4;
+        --text: #000000;
+        --accent: #ff6a00;
+        --shadow: 4px 4px 0px var(--text);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'IBM Plex Mono', monospace;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1120px, 92%);
+        margin: 0 auto;
+      }
+
+      .global-header {
+        border-bottom: 2px solid var(--text);
+        background: var(--bg);
+      }
+
+      .header-inner {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 2rem;
+        padding: 1.5rem 0;
+      }
+
+      .brand {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+
+      .nav-links {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav-links a {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        padding: 0.5rem 1.25rem;
+        border: 2px solid var(--text);
+        background: var(--bg);
+        box-shadow: var(--shadow);
+        transition: transform 0.1s ease-in-out;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus {
+        transform: translate(-2px, -2px);
+        outline: none;
+      }
+
+      .auth-cta .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        padding: 0.65rem 1.5rem;
+        border: 2px solid var(--text);
+        background: var(--accent);
+        color: var(--text);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+      }
+
+      .auth-cta .button:hover,
+      .auth-cta .button:focus {
+        transform: translate(-2px, -2px);
+        outline: none;
+      }
+
+      .mobile-nav {
+        display: none;
+        grid-column: 1 / -1;
+      }
+
+      .mobile-nav summary {
+        list-style: none;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        border: 2px solid var(--text);
+        background: var(--accent);
+        color: var(--text);
+        padding: 0.65rem 1rem;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+      }
+
+      .mobile-nav summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .mobile-nav[open] summary {
+        margin-bottom: 1rem;
+      }
+
+      .mobile-nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .mobile-nav-links a {
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--text);
+        background: var(--bg);
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        box-shadow: var(--shadow);
+      }
+
+      main {
+        padding: 3rem 0 4rem;
+      }
+
+      .hero-card {
+        border: 2px solid var(--text);
+        background: var(--bg);
+        box-shadow: var(--shadow);
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .headline {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: clamp(1.5rem, 2vw + 1.2rem, 2.4rem);
+        margin: 0;
+      }
+
+      .paths-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 2rem;
+        min-height: 60vh;
+      }
+
+      .path-card {
+        border: 2px solid var(--text);
+        background: var(--bg);
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .path-id {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 1rem;
+      }
+
+      .path-title {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 1.2rem;
+        margin: 0;
+      }
+
+      .path-meta {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        font-size: 0.9rem;
+      }
+
+      .tag {
+        border: 2px solid var(--text);
+        padding: 0.35rem 0.75rem;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        background: #ffffff;
+        box-shadow: var(--shadow);
+      }
+
+      .button {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid var(--text);
+        background: var(--accent);
+        color: var(--text);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+        text-align: center;
+      }
+
+      .button:hover,
+      .button:focus {
+        transform: translate(-2px, -2px);
+        outline: none;
+      }
+
+      .footer {
+        background: var(--text);
+        color: #ffffff;
+        padding: 3rem 0 2rem;
+      }
+
+      .footer-inner {
+        width: min(1120px, 92%);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 2rem;
+      }
+
+      .footer h4 {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        margin: 0 0 1rem;
+        font-size: 0.95rem;
+      }
+
+      .footer ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .footer a {
+        color: #ffffff;
+        font-size: 0.95rem;
+      }
+
+      .footer-bottom {
+        border-top: 2px solid #ffffff;
+        margin-top: 3rem;
+        padding-top: 1rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        text-align: center;
+      }
+
+      @media (max-width: 1024px) {
+        .header-inner {
+          grid-template-columns: 1fr;
+          justify-items: start;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .mobile-nav {
+          display: block;
+        }
+
+        .paths-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .footer-inner {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .paths-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-inner {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="global-header">
+      <div class="container header-inner">
+        <a href="/index.html" class="brand">Project Sapiens</a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="/paths.html">Learning Paths</a>
+          <a href="/labs.html">Labs</a>
+          <a href="/community.html">Community</a>
+        </nav>
+        <div class="auth-cta">
+          <a class="button" href="/login.html">Log In</a>
+        </div>
+        <details class="mobile-nav">
+          <summary>Menu</summary>
+          <div class="mobile-nav-links">
+            <a href="/paths.html">Learning Paths</a>
+            <a href="/labs.html">Labs</a>
+            <a href="/community.html">Community</a>
+            <a href="/login.html">Log In</a>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main>
+      <section class="container">
+        <article class="hero-card">
+          <h1 class="headline">Choose Your Strategic Trajectory</h1>
+          <p>
+            Each Project Sapiens path is engineered for rapid fluency and ruthless execution. Select the operating discipline that
+            aligns with your mandate and accelerate through focused sprints.
+          </p>
+        </article>
+        <div class="paths-grid">
+          <article class="path-card" id="builders">
+            <span class="path-id">Path 01</span>
+            <h2 class="path-title">AI Builders</h2>
+            <p>Engineer automation frameworks, orchestrate agent teams, and deploy production-ready AI tooling.</p>
+            <div class="path-meta">
+              <span class="tag">12 Modules</span>
+              <span class="tag">6 Labs</span>
+              <span class="tag">Certification</span>
+            </div>
+            <a class="button" href="/login.html">Enter Path</a>
+          </article>
+          <article class="path-card" id="leaders">
+            <span class="path-id">Path 02</span>
+            <h2 class="path-title">AI Leaders</h2>
+            <p>Architect org-wide adoption, codify governance, and ship high-velocity operating cadences across teams.</p>
+            <div class="path-meta">
+              <span class="tag">10 Modules</span>
+              <span class="tag">4 Labs</span>
+              <span class="tag">Playbooks</span>
+            </div>
+            <a class="button" href="/login.html">Enter Path</a>
+          </article>
+          <article class="path-card" id="analysts">
+            <span class="path-id">Path 03</span>
+            <h2 class="path-title">AI Analysts</h2>
+            <p>Operationalize insight pipelines, automate reporting stacks, and deliver narrative intelligence on demand.</p>
+            <div class="path-meta">
+              <span class="tag">8 Modules</span>
+              <span class="tag">5 Labs</span>
+              <span class="tag">Case Reviews</span>
+            </div>
+            <a class="button" href="/login.html">Enter Path</a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>
+          <h4>Project Sapiens</h4>
+          <ul>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/paths.html">Learning Paths</a></li>
+            <li><a href="/app/dashboard.html">Dashboard</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Programs</h4>
+          <ul>
+            <li><a href="#builders">Builders</a></li>
+            <li><a href="#leaders">Leaders</a></li>
+            <li><a href="#analysts">Analysts</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Labs</h4>
+          <ul>
+            <li><a href="/labs.html">Automation Lab</a></li>
+            <li><a href="/labs.html">Prompt Lab</a></li>
+            <li><a href="/labs.html">Data Lab</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="mailto:team@projectsapiens.ai">Email</a></li>
+            <li><a href="/community.html">Community</a></li>
+            <li><a href="/login.html">Member Portal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="container footer-bottom">© Project Sapiens. All Rights Reserved.</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = 'https://cmjocwutzuujokaoscox.supabase.co';
+      const SUPABASE_KEY =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtam9jd3V0enV1am9rYW9zY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODkwNzAsImV4cCI6MjA3Nzg2NTA3MH0.ekLWlkUJ5jvFwDIxgSx7PhXV7JjcsyzuALxDTqgIEns';
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      async function signUp(event) {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.querySelector('input[type="email"]').value.trim();
+        const password = form.querySelector('input[type="password"]').value;
+        const messageEl = form.querySelector('[data-form-message]');
+        if (messageEl) {
+          messageEl.textContent = '';
+          messageEl.classList.remove('error');
+        }
+
+        const { error } = await supabaseClient.auth.signUp({ email, password });
+
+        if (error) {
+          if (messageEl) {
+            messageEl.textContent = error.message;
+            messageEl.classList.add('error');
+          }
+          return;
+        }
+
+        if (messageEl) {
+          messageEl.textContent = 'Check your inbox to confirm your account.';
+        }
+        form.reset();
+      }
+
+      async function signInWithPassword(event) {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.querySelector('input[type="email"]').value.trim();
+        const password = form.querySelector('input[type="password"]').value;
+        const messageEl = form.querySelector('[data-form-message]');
+        if (messageEl) {
+          messageEl.textContent = '';
+          messageEl.classList.remove('error');
+        }
+
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          if (messageEl) {
+            messageEl.textContent = error.message;
+            messageEl.classList.add('error');
+          }
+          return;
+        }
+
+        window.location.href = '/app/dashboard.html';
+      }
+
+      async function getSession() {
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) {
+          throw error;
+        }
+        return data.session;
+      }
+
+      async function signOut(event) {
+        if (event) {
+          event.preventDefault();
+        }
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) {
+          console.error('Error signing out:', error);
+          return;
+        }
+        window.location.href = '/login.html';
+      }
+    </script>
+  </body>
+</html>
