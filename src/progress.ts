@@ -26,13 +26,23 @@ export function countCompletedModules(
   }
 
   const moduleLookup = new Set(path.modules.map((module) => module.id));
+  const countedModules = new Set<string>();
 
   return record.modules.reduce((count, moduleProgress) => {
     if (!moduleLookup.has(moduleProgress.moduleId)) {
       return count;
     }
 
-    return moduleProgress.completed ? count + 1 : count;
+    if (!moduleProgress.completed) {
+      return count;
+    }
+
+    if (countedModules.has(moduleProgress.moduleId)) {
+      return count;
+    }
+
+    countedModules.add(moduleProgress.moduleId);
+    return count + 1;
   }, 0);
 }
 
