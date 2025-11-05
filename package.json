@@ -1,0 +1,24 @@
+{
+  "name": "project-sapiens",
+  "version": "1.0.0",
+  "description": "Core learning path utilities for Project Sapiens",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "learning",
+    "progress",
+    "ai",
+    "education"
+  ],
+  "author": "Project Sapiens Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  }
+}
