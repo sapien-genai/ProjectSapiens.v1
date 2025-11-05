@@ -45,6 +45,19 @@ describe('countCompletedModules', () => {
   it('returns zero when no record is available', () => {
     expect(countCompletedModules(demoPath, undefined)).toBe(0);
   });
+
+  it('does not double count duplicate module progress entries', () => {
+    const record: PathProgressRecord = {
+      pathId: 'path-collaborator',
+      modules: [
+        { moduleId: 'module-intro', completed: true },
+        { moduleId: 'module-intro', completed: true },
+        { moduleId: 'module-systems', completed: true },
+      ],
+    };
+
+    expect(countCompletedModules(demoPath, record)).toBe(2);
+  });
 });
 
 describe('calculateCompletionRatio', () => {
