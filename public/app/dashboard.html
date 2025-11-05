@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Project Sapiens</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background-color: #F4F4F4;
+      color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .neo-heading {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: #000000;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-size: 18px;
+      color: #555555;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    nav {
+      background-color: #F4F4F4;
+      border-bottom: 2px solid #000000;
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      text-decoration: none;
+      color: #000000;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #000000;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: #FF6A00;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-secondary {
+      background-color: #FFFFFF;
+      color: #000000;
+      border: 2px solid #000000;
+      padding: 10px 20px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      box-shadow: 4px 4px 0px #000000;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .btn-nav-secondary:hover,
+    .btn-nav-secondary:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    .mobile-menu-btn {
+      display: block;
+      background-color: #FFFFFF;
+      border: 2px solid #000000;
+      padding: 8px 12px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #000000;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #F4F4F4;
+      z-index: 100;
+      padding: 24px;
+    }
+
+    .mobile-menu.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .mobile-menu-close {
+      background-color: #000000;
+      color: #FFFFFF;
+      border: 2px solid #000000;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .mobile-menu-link {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      text-transform: uppercase;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 16px;
+      flex: 1;
+    }
+
+    .welcome {
+      font-size: 32px;
+      margin-bottom: 48px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+
+    .card {
+      background-color: #FFFFFF;
+      border: 2px solid #000000;
+      box-shadow: 6px 6px 0px #000000;
+      padding: 32px;
+    }
+
+    .card-dark {
+      background-color: #000000;
+      color: #FFFFFF;
+      border: 4px solid #0A74FF;
+      box-shadow: 6px 6px 0px #000000;
+      padding: 32px;
+    }
+
+    .card h2 {
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: #555555;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-dark .stat-label {
+      color: #999999;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .level-display {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .level-number {
+      font-size: 72px;
+      font-weight: 800;
+      color: #0A74FF;
+      line-height: 1;
+    }
+
+    .level-title {
+      font-size: 20px;
+      margin: 8px 0;
+    }
+
+    .level-subtitle {
+      font-size: 12px;
+      color: #999999;
+    }
+
+    .xp-bar-container {
+      margin-bottom: 16px;
+    }
+
+    .xp-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .xp-current {
+      color: #0A74FF;
+      font-weight: 800;
+    }
+
+    .xp-bar {
+      width: 100%;
+      height: 24px;
+      background-color: #555555;
+      border: 2px solid #0A74FF;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .xp-fill {
+      height: 100%;
+      background-color: #0A74FF;
+      transition: width 0.5s ease;
+    }
+
+    .xp-note {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .skill-item {
+      margin-bottom: 16px;
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .skill-name {
+      font-weight: 800;
+    }
+
+    .skill-bar {
+      width: 100%;
+      height: 12px;
+      background-color: #FFFFFF;
+      border: 2px solid #000000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      transition: width 0.5s ease;
+    }
+
+    .info-box {
+      background-color: #F4F4F4;
+      border: 2px solid #000000;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .info-box p {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .info-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .card-header-icon {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    footer {
+      background-color: #000000;
+      color: #FFFFFF;
+      border-top: 2px solid #000000;
+      padding: 48px 16px 32px;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .footer-column h3 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: #FF6A00;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-link {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #0A74FF;
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 32px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid #333333;
+      text-align: center;
+      font-size: 12px;
+      color: #999999;
+    }
+
+    @media (max-width: 640px) {
+      .welcome {
+        font-size: 24px;
+      }
+
+      .card,
+      .card-dark {
+        padding: 24px;
+      }
+
+      .level-number {
+        font-size: 56px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" class="loading">
+    Loading your dashboard...
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <nav>
+      <div class="nav-container">
+        <a href="/" class="logo neo-heading">
+          PROJECT SAPIENS
+        </a>
+
+        <div class="nav-links">
+          <a href="/paths.html" class="nav-link">LEARNING PATHS</a>
+          <a href="/labs.html" class="nav-link">LABS</a>
+          <a href="/community.html" class="nav-link">COMMUNITY</a>
+        </div>
+
+        <div class="nav-actions">
+          <button id="logoutBtn" class="btn-nav-secondary">LOG OUT</button>
+          <button class="mobile-menu-btn" onclick="toggleMobileMenu()">MENU</button>
+        </div>
+      </div>
+    </nav>
+
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="neo-heading" style="font-size: 20px;">PROJECT SAPIENS</span>
+        <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
+      </div>
+      <div class="mobile-menu-links">
+        <a href="/paths.html" class="mobile-menu-link">LEARNING PATHS</a>
+        <a href="/labs.html" class="mobile-menu-link">LABS</a>
+        <a href="/community.html" class="mobile-menu-link">COMMUNITY</a>
+        <button id="logoutBtnMobile" class="mobile-menu-link" style="background: none; border: none; cursor: pointer; text-align: left; padding: 0;">LOG OUT</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1 class="neo-heading welcome">WELCOME BACK, <span id="usernameDisplay">USER</span></h1>
+
+      <div class="dashboard-grid">
+        <div>
+          <div class="card">
+            <div class="card-header-icon">
+              <i class="ph-bold ph-user-circle" style="font-size: 24px;"></i>
+              <h2 class="neo-heading" style="margin: 0;">MY PROFILE</h2>
+            </div>
+
+            <div class="info-box">
+              <p><span class="stat-label">USERNAME</span></p>
+              <p class="stat-value" id="usernameValue">Loading...</p>
+
+              <p><span class="stat-label">EMAIL</span></p>
+              <p class="stat-value" id="emailValue">Loading...</p>
+
+              <p><span class="stat-label">MEMBER SINCE</span></p>
+              <p class="stat-value" id="memberSince">Loading...</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 24px;" class="card">
+            <div class="card-header-icon">
+              <i class="ph-bold ph-chart-line-up" style="font-size: 24px;"></i>
+              <h2 class="neo-heading" style="margin: 0;">SKILL PROGRESS</h2>
+            </div>
+
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name neo-heading">PROMPTING</span>
+                <span class="font-bold">80%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-fill" style="width: 80%; background-color: #FF6A00;"></div>
+              </div>
+            </div>
+
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name neo-heading">WORKFLOW DESIGN</span>
+                <span class="font-bold">50%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-fill" style="width: 50%; background-color: #0A74FF;"></div>
+              </div>
+            </div>
+
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name neo-heading">VERIFICATION</span>
+                <span class="font-bold">40%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-fill" style="width: 40%; background-color: #FF6A00;"></div>
+              </div>
+            </div>
+
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name neo-heading">ITERATION</span>
+                <span class="font-bold">65%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-fill" style="width: 65%; background-color: #0A74FF;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card-dark">
+            <div class="card-header-icon">
+              <i class="ph-bold ph-lightning" style="font-size: 24px; color: #0A74FF;"></i>
+              <h2 class="neo-heading" style="margin: 0;">AI FLUENCY</h2>
+            </div>
+
+            <div class="level-display">
+              <div class="level-number" id="levelNumber">1</div>
+              <div class="neo-heading level-title" id="levelTitle">AI COLLABORATOR</div>
+              <div class="level-subtitle" id="levelSubtitle">AI Fundamentals</div>
+            </div>
+
+            <div class="xp-bar-container">
+              <div class="xp-label">
+                <span>XP TO LEVEL <span id="nextLevel">2</span></span>
+                <span class="xp-current"><span id="currentXP">0</span> / <span id="targetXP">1000</span></span>
+              </div>
+              <div class="xp-bar">
+                <div class="xp-fill" id="xpFill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="xp-note" id="xpNote">
+              0 XP until AI Practitioner
+            </div>
+          </div>
+
+          <div style="margin-top: 24px;" class="card">
+            <div class="card-header-icon">
+              <i class="ph-bold ph-target" style="font-size: 24px; color: #FF6A00;"></i>
+              <h2 class="neo-heading" style="margin: 0;">CURRENT CHALLENGE</h2>
+            </div>
+            <div class="info-box">
+              <p class="stat-label">WEEKLY CHALLENGE</p>
+              <p style="font-size: 14px; margin-bottom: 16px;">Complete your first Lab exercise to unlock personalized challenges.</p>
+              <p style="font-size: 12px; color: #555555;">Reward: +500 XP</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 24px;" class="card">
+            <div class="card-header-icon">
+              <i class="ph-bold ph-compass" style="font-size: 24px; color: #0A74FF;"></i>
+              <h2 class="neo-heading" style="margin: 0;">NEXT STEPS</h2>
+            </div>
+            <div class="info-box">
+              <p class="stat-label">RECOMMENDED</p>
+              <p style="font-size: 14px; margin-bottom: 8px; font-weight: 500;">Explore Learning Paths</p>
+              <p style="font-size: 12px; color: #555555;">Choose a role-specific path to begin your AI journey.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-column">
+          <h3>LEARN</h3>
+          <div class="footer-links">
+            <a href="/paths.html" class="footer-link">Learning Paths</a>
+            <a href="/labs.html" class="footer-link">Labs</a>
+            <a href="/courses.html" class="footer-link">Courses</a>
+            <a href="/resources.html" class="footer-link">Resources</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>COMMUNITY</h3>
+          <div class="footer-links">
+            <a href="/community.html" class="footer-link">Community Hub</a>
+            <a href="/forums.html" class="footer-link">Forums</a>
+            <a href="/events.html" class="footer-link">Events</a>
+            <a href="/mentorship.html" class="footer-link">Mentorship</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>ABOUT</h3>
+          <div class="footer-links">
+            <a href="/about.html" class="footer-link">About Us</a>
+            <a href="/mission.html" class="footer-link">Our Mission</a>
+            <a href="/team.html" class="footer-link">Team</a>
+            <a href="/careers.html" class="footer-link">Careers</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>SUPPORT</h3>
+          <div class="footer-links">
+            <a href="/help.html" class="footer-link">Help Center</a>
+            <a href="/faq.html" class="footer-link">FAQ</a>
+            <a href="/contact.html" class="footer-link">Contact</a>
+            <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        © 2025 PROJECT SAPIENS. All rights reserved.
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://cmjocwutzuujokaoscox.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtam9jd3V0enV1am9rYW9zY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODkwNzAsImV4cCI6MjA3Nzg2NTA3MH0.ekLWlkUJ5jvFwDIxgSx7PhXV7JjcsyzuALxDTqgIEns';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const LEVEL_THRESHOLDS = {
+      1: { min: 0, max: 1000, title: 'AI COLLABORATOR', subtitle: 'AI Fundamentals' },
+      2: { min: 1000, max: 4000, title: 'AI PRACTITIONER', subtitle: 'Workflow Designer' },
+      3: { min: 4000, max: 10000, title: 'AI INTEGRATOR', subtitle: 'System Builder' },
+      4: { min: 10000, max: Infinity, title: 'AI LEADER', subtitle: 'Solution Architect' }
+    };
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+
+    function calculateLevel(xp) {
+      for (const [level, data] of Object.entries(LEVEL_THRESHOLDS)) {
+        if (xp >= data.min && xp < data.max) {
+          return {
+            level: parseInt(level),
+            ...data
+          };
+        }
+      }
+      return { level: 4, ...LEVEL_THRESHOLDS[4] };
+    }
+
+    function updateDashboard(profile) {
+      const levelData = calculateLevel(profile.xp_points);
+      const xpInCurrentLevel = profile.xp_points - levelData.min;
+      const xpNeededForNextLevel = levelData.max - levelData.min;
+      const xpProgress = levelData.max === Infinity ? 100 : (xpInCurrentLevel / xpNeededForNextLevel) * 100;
+
+      document.getElementById('usernameDisplay').textContent = profile.username.toUpperCase();
+      document.getElementById('usernameValue').textContent = profile.username;
+      document.getElementById('emailValue').textContent = profile.email;
+
+      const memberDate = new Date(profile.created_at);
+      document.getElementById('memberSince').textContent = memberDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      document.getElementById('levelNumber').textContent = levelData.level;
+      document.getElementById('levelTitle').textContent = levelData.title;
+      document.getElementById('levelSubtitle').textContent = levelData.subtitle;
+
+      document.getElementById('currentXP').textContent = profile.xp_points;
+      document.getElementById('targetXP').textContent = levelData.max === Infinity ? '∞' : levelData.max;
+      document.getElementById('nextLevel').textContent = levelData.level < 4 ? levelData.level + 1 : '∞';
+
+      document.getElementById('xpFill').style.width = xpProgress + '%';
+
+      if (levelData.level < 4) {
+        const xpRemaining = levelData.max - profile.xp_points;
+        const nextLevelTitle = LEVEL_THRESHOLDS[levelData.level + 1].title.split(' ')[1];
+        document.getElementById('xpNote').textContent =
+          `${xpRemaining.toLocaleString()} XP until ${nextLevelTitle}`;
+      } else {
+        document.getElementById('xpNote').textContent = 'Maximum level achieved!';
+      }
+    }
+
+    async function loadDashboard() {
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        if (!session) {
+          window.location.href = '/login.html';
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .maybeSingle();
+
+        if (profileError) throw profileError;
+
+        if (!profile) {
+          console.error('Profile not found');
+          await supabase.auth.signOut();
+          window.location.href = '/login.html';
+          return;
+        }
+
+        updateDashboard(profile);
+
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+
+      } catch (error) {
+        console.error('Dashboard load error:', error);
+        window.location.href = '/login.html';
+      }
+    }
+
+    async function handleLogout() {
+      try {
+        await supabase.auth.signOut();
+        window.location.href = '/login.html';
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    document.getElementById('logoutBtnMobile').addEventListener('click', handleLogout);
+
+    loadDashboard();
+  </script>
+</body>
+</html>
