@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Sapiens - AI Learning Ecosystem</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background-color: #F4F4F4;
+      color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .neo-heading {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: #000000;
+    }
+
+    /* GLOBAL HEADER */
+    nav {
+      background-color: #F4F4F4;
+      border-bottom: 2px solid #000000;
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      text-decoration: none;
+      color: #000000;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #000000;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: #FF6A00;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-secondary {
+      background-color: #FFFFFF;
+      color: #000000;
+      border: 2px solid #000000;
+      padding: 10px 20px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      box-shadow: 4px 4px 0px #000000;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-nav-secondary:hover,
+    .btn-nav-secondary:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    .mobile-menu-btn {
+      display: block;
+      background-color: #FFFFFF;
+      border: 2px solid #000000;
+      padding: 8px 12px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #000000;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #F4F4F4;
+      z-index: 100;
+      padding: 24px;
+    }
+
+    .mobile-menu.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .mobile-menu-close {
+      background-color: #000000;
+      color: #FFFFFF;
+      border: 2px solid #000000;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .mobile-menu-link {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      text-transform: uppercase;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      flex: 1;
+    }
+
+    .section {
+      padding: 64px 16px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .section {
+        padding: 96px 16px;
+      }
+    }
+
+    /* HERO SECTION */
+    .hero-section {
+      background-color: #F4F4F4;
+      text-align: center;
+      padding: 80px 16px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-section {
+        padding: 120px 16px;
+      }
+    }
+
+    .hero-heading {
+      font-size: 48px;
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+
+    @media (min-width: 768px) {
+      .hero-heading {
+        font-size: 72px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero-heading {
+        font-size: 96px;
+      }
+    }
+
+    .hero-subheading {
+      font-size: 36px;
+      margin-bottom: 8px;
+      line-height: 1.1;
+      color: #FF6A00;
+    }
+
+    @media (min-width: 768px) {
+      .hero-subheading {
+        font-size: 48px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero-subheading {
+        font-size: 64px;
+      }
+    }
+
+    .hero-terminal {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      margin-bottom: 32px;
+      line-height: 1.4;
+    }
+
+    @media (min-width: 768px) {
+      .hero-terminal {
+        font-size: 28px;
+      }
+    }
+
+    .hero-description {
+      max-width: 800px;
+      margin: 0 auto 48px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333333;
+    }
+
+    @media (min-width: 768px) {
+      .hero-description {
+        font-size: 18px;
+      }
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .hero-cta {
+        flex-direction: row;
+        gap: 24px;
+      }
+    }
+
+    .btn-primary {
+      background-color: #FF6A00;
+      color: #000000;
+      border: 2px solid #000000;
+      padding: 20px 40px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      text-transform: uppercase;
+      box-shadow: 8px 8px 0px #000000;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:active {
+      transform: translate(8px, 8px);
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background-color: #FFFFFF;
+      color: #000000;
+      border: 2px solid #000000;
+      padding: 20px 40px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      text-transform: uppercase;
+      box-shadow: 8px 8px 0px #000000;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover,
+    .btn-secondary:active {
+      transform: translate(8px, 8px);
+      box-shadow: none;
+    }
+
+    /* SIGNUP FORM SECTION */
+    .signup-section {
+      background-color: #FFFFFF;
+      border-top: 2px solid #000000;
+      border-bottom: 2px solid #000000;
+      padding: 64px 16px;
+    }
+
+    .signup-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .signup-card {
+      background-color: #FFFFFF;
+      border: 2px solid #000000;
+      box-shadow: 8px 8px 0px #000000;
+      padding: 48px 32px;
+    }
+
+    @media (max-width: 640px) {
+      .signup-card {
+        padding: 32px 24px;
+      }
+    }
+
+    .signup-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .signup-header h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .signup-header h2 {
+        font-size: 24px;
+      }
+    }
+
+    .signup-header p {
+      font-size: 14px;
+      color: #555555;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input {
+      width: 100%;
+      background-color: #FFFFFF;
+      border: 2px solid #000000;
+      padding: 14px 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #0A74FF;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: #FF6A00;
+      color: #000000;
+      border: 2px solid #000000;
+      padding: 16px 24px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      box-shadow: 4px 4px 0px #000000;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      margin-bottom: 16px;
+    }
+
+    .btn-submit:hover,
+    .btn-submit:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .link-text {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 24px;
+    }
+
+    .link-text a {
+      color: #0A74FF;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .link-text a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      background-color: #000000;
+      color: #FFFFFF;
+      border: 2px solid #FF6A00;
+      padding: 12px 16px;
+      font-size: 12px;
+      margin-bottom: 24px;
+      display: none;
+    }
+
+    .success-message {
+      background-color: #000000;
+      color: #FFFFFF;
+      border: 2px solid #0A74FF;
+      padding: 12px 16px;
+      font-size: 12px;
+      margin-bottom: 24px;
+      display: none;
+    }
+
+    /* PILLARS SECTION */
+    .pillars-section {
+      background-color: #F4F4F4;
+    }
+
+    .section-title {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 32px;
+        margin-bottom: 48px;
+      }
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .pillars-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 48px;
+      }
+    }
+
+    .pillar-card {
+      background-color: #FFFFFF;
+      border: 2px solid #000000;
+      box-shadow: 8px 8px 0px #000000;
+      padding: 32px;
+      transition: all 0.1s ease;
+    }
+
+    .pillar-card:hover {
+      transform: translate(4px, 4px);
+      box-shadow: 4px 4px 0px #000000;
+    }
+
+    .pillar-title {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: #FF6A00;
+    }
+
+    .pillar-description {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333333;
+    }
+
+    /* FLUENCY SPECTRUM SECTION */
+    .spectrum-section {
+      background-color: #000000;
+      color: #FFFFFF;
+      border-top: 2px solid #000000;
+      border-bottom: 2px solid #000000;
+    }
+
+    .spectrum-section .section-title {
+      color: #FFFFFF;
+    }
+
+    .spectrum-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .spectrum-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .spectrum-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .level-card {
+      background-color: #FFFFFF;
+      border: 2px solid #000000;
+      box-shadow: 6px 6px 0px #FF6A00;
+      padding: 24px;
+    }
+
+    .level-number {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #FF6A00;
+    }
+
+    .level-name {
+      font-size: 24px;
+      margin-bottom: 12px;
+      color: #000000;
+    }
+
+    .level-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333333;
+    }
+
+    /* GLOBAL FOOTER */
+    footer {
+      background-color: #000000;
+      color: #FFFFFF;
+      border-top: 2px solid #000000;
+      padding: 48px 16px 32px;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .footer-column h3 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: #FF6A00;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-link {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #0A74FF;
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 32px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid #333333;
+      text-align: center;
+      font-size: 12px;
+      color: #999999;
+    }
+  </style>
+</head>
+<body>
+  <!-- GLOBAL HEADER -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo neo-heading">
+        PROJECT SAPIENS
+      </a>
+
+      <div class="nav-links">
+        <a href="/paths.html" class="nav-link">LEARNING PATHS</a>
+        <a href="/labs.html" class="nav-link">LABS</a>
+        <a href="/community.html" class="nav-link">COMMUNITY</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="/login.html" class="btn-nav-secondary">LOG IN</a>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">MENU</button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="mobileMenu" class="mobile-menu">
+    <div class="mobile-menu-header">
+      <span class="neo-heading" style="font-size: 20px;">PROJECT SAPIENS</span>
+      <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
+    </div>
+    <div class="mobile-menu-links">
+      <a href="/paths.html" class="mobile-menu-link">LEARNING PATHS</a>
+      <a href="/labs.html" class="mobile-menu-link">LABS</a>
+      <a href="/community.html" class="mobile-menu-link">COMMUNITY</a>
+      <a href="/login.html" class="mobile-menu-link">LOG IN</a>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <h1 class="neo-heading hero-heading">DON'T JUST USE AI.</h1>
+      <div class="hero-terminal">
+        <div class="neo-heading hero-subheading">&gt; BUILD WITH IT.</div>
+        <div class="neo-heading hero-subheading">&gt; LIVE WITH IT.</div>
+        <div class="neo-heading hero-subheading">&gt; LEAD WITH IT.</div>
+      </div>
+      <p class="hero-description">
+        Project Sapiens is an adaptive AI learning ecosystem that transforms users from AI Users into AI Collaborators, Architects, and Innovators.
+      </p>
+      <div class="hero-cta">
+        <a href="#signup" class="btn-primary">START YOUR JOURNEY</a>
+        <a href="/labs.html" class="btn-secondary">EXPLORE THE LABS</a>
+      </div>
+    </section>
+
+    <!-- SIGNUP FORM SECTION -->
+    <section id="signup" class="signup-section">
+      <div class="signup-container">
+        <div class="signup-card">
+          <div class="signup-header">
+            <h2 class="neo-heading">JOIN PROJECT SAPIENS</h2>
+            <p>Transform from AI User to AI Innovator</p>
+          </div>
+
+          <div id="errorMessage" class="error-message"></div>
+          <div id="successMessage" class="success-message"></div>
+
+          <form id="signupForm">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required autocomplete="new-password" minlength="6">
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+              SIGN UP & ACCESS LABS
+            </button>
+          </form>
+
+          <div class="link-text">
+            Already an Architect? <a href="/login.html">LOG IN</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PILLARS SECTION -->
+    <section class="section pillars-section">
+      <h2 class="neo-heading section-title">A LIVING ECOSYSTEM</h2>
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <h3 class="neo-heading pillar-title">ACADEMY</h3>
+          <p class="pillar-description">
+            Goal-based, role-specific learning paths that adapt to your experience level and career aspirations. Master AI through structured curriculum designed by industry practitioners.
+          </p>
+        </div>
+        <div class="pillar-card">
+          <h3 class="neo-heading pillar-title">LAB</h3>
+          <p class="pillar-description">
+            Interactive sandboxes for real experimentation. Build, break, and iterate on AI projects in a safe environment. Learn by doing with hands-on challenges and real-world scenarios.
+          </p>
+        </div>
+        <div class="pillar-card">
+          <h3 class="neo-heading pillar-title">NETWORK</h3>
+          <p class="pillar-description">
+            Collaborative network for peer validation and mentorship. Connect with AI practitioners, share your work, get feedback, and grow together in a supportive community.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FLUENCY SPECTRUM SECTION -->
+    <section class="section spectrum-section">
+      <h2 class="neo-heading section-title">THE AI FLUENCY SPECTRUM</h2>
+      <div class="spectrum-grid">
+        <div class="level-card">
+          <div class="neo-heading level-number">LEVEL 1</div>
+          <h3 class="neo-heading level-name">COLLABORATOR</h3>
+          <p class="level-description">
+            Master the fundamentals of AI interaction. Learn to craft effective prompts and understand AI capabilities and limitations.
+          </p>
+        </div>
+        <div class="level-card">
+          <div class="neo-heading level-number">LEVEL 2</div>
+          <h3 class="neo-heading level-name">PRACTITIONER</h3>
+          <p class="level-description">
+            Apply AI to solve real problems. Build workflows, automate tasks, and integrate AI tools into your daily work.
+          </p>
+        </div>
+        <div class="level-card">
+          <div class="neo-heading level-number">LEVEL 3</div>
+          <h3 class="neo-heading level-name">INTEGRATOR</h3>
+          <p class="level-description">
+            Design and implement AI systems. Create custom solutions, understand technical architecture, and build scalable applications.
+          </p>
+        </div>
+        <div class="level-card">
+          <div class="neo-heading level-number">LEVEL 4</div>
+          <h3 class="neo-heading level-name">LEADER</h3>
+          <p class="level-description">
+            Shape AI strategy and drive organizational transformation. Lead teams, make architectural decisions, and innovate at scale.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- GLOBAL FOOTER -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>LEARN</h3>
+        <div class="footer-links">
+          <a href="/paths.html" class="footer-link">Learning Paths</a>
+          <a href="/labs.html" class="footer-link">Labs</a>
+          <a href="/courses.html" class="footer-link">Courses</a>
+          <a href="/resources.html" class="footer-link">Resources</a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>COMMUNITY</h3>
+        <div class="footer-links">
+          <a href="/community.html" class="footer-link">Community Hub</a>
+          <a href="/forums.html" class="footer-link">Forums</a>
+          <a href="/events.html" class="footer-link">Events</a>
+          <a href="/mentorship.html" class="footer-link">Mentorship</a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>ABOUT</h3>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About Us</a>
+          <a href="/mission.html" class="footer-link">Our Mission</a>
+          <a href="/team.html" class="footer-link">Team</a>
+          <a href="/careers.html" class="footer-link">Careers</a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>SUPPORT</h3>
+        <div class="footer-links">
+          <a href="/help.html" class="footer-link">Help Center</a>
+          <a href="/faq.html" class="footer-link">FAQ</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 PROJECT SAPIENS. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://cmjocwutzuujokaoscox.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtam9jd3V0enV1am9rYW9zY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODkwNzAsImV4cCI6MjA3Nzg2NTA3MH0.ekLWlkUJ5jvFwDIxgSx7PhXV7JjcsyzuALxDTqgIEns';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const form = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('active');
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+    }
+
+    function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.style.display = 'block';
+      errorMessage.style.display = 'none';
+    }
+
+    function hideMessages() {
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideMessages();
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!username || !email || !password) {
+        showError('All fields are required');
+        return;
+      }
+
+      if (password.length < 6) {
+        showError('Password must be at least 6 characters');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'CREATING ACCOUNT...';
+
+      try {
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+        });
+
+        if (authError) throw authError;
+
+        if (authData.user) {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert({
+              id: authData.user.id,
+              username: username,
+              email: email,
+              fluency_level: 1,
+              xp_points: 0
+            });
+
+          if (profileError) throw profileError;
+
+          showSuccess('Account created successfully! Redirecting...');
+
+          setTimeout(() => {
+            window.location.href = '/app/dashboard.html';
+          }, 1500);
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        showError(error.message || 'Failed to create account. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'SIGN UP & ACCESS LABS';
+      }
+    });
+  </script>
+</body>
+</html>
